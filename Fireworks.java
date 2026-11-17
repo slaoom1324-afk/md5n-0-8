@@ -9,7 +9,6 @@ import net.minecraft.util.Hand;
 public final class Fireworks {
     private Fireworks() {}
 
-    /** يطلق صاروخ فايروركس (من اليد الثانية أو الهوت بار) ويرجع true لو نجح. */
     public static boolean use() {
         MinecraftClient mc = MinecraftClient.getInstance();
         ClientPlayerEntity player = mc.player;
@@ -24,15 +23,20 @@ public final class Fireworks {
         PlayerInventory inv = player.getInventory();
         int slot = -1;
         for (int i = 0; i < 9; i++) {
-            if (inv.getStack(i).isOf(Items.FIREWORK_ROCKET)) { slot = i; break; }
+            if (inv.getStack(i).isOf(Items.FIREWORK_ROCKET)) {
+                slot = i;
+                break;
+            }
         }
         if (slot == -1) return false;
 
-        int previous = inv.getSelectedSlot();
-        inv.setSelectedSlot(slot);
+        int previous = inv.selectedSlot;
+        inv.selectedSlot = slot;
+
         mc.interactionManager.interactItem(player, Hand.MAIN_HAND);
         player.swingHand(Hand.MAIN_HAND);
-        inv.setSelectedSlot(previous);
+        inv.selectedSlot = previous;
+
         return true;
     }
 }
